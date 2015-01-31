@@ -6,8 +6,8 @@
 Whenever possible, split your code into multiple files and modules!
 Each module should be defined:
 
-- From high level to lower level
-- From public to private
+- From high level to low level - when reading the code, developers should immediately understand how the module works, then continue reading to learn the implementation details.
+- From public to private - when creating modules, the most important aspect is the `input -> output`. This should be almost immediately obviously.
 
 Code in a single file should generally be structured in the following order:
 
@@ -22,6 +22,8 @@ Code in a single file should generally be structured in the following order:
 ### Don't hoist variables!
 
 There's no need for that!
+It makes your code look messy and more difficult to understand.
+It also demonstrates a lack of understanding of how JavaScript variables work.
 
 ### Avoid defining (anonymous) functions within functions
 
@@ -41,15 +43,15 @@ should really be:
 
 ```js
 function sumArray(arr) {
-  return arr.reduce(reduceSum, 0)
+  return arr.reduce(sum, 0)
 }
 
-function reduceSum(a, b) {
+function sum(a, b) {
   return a + b
 }
 ```
 
-However, doing the same in the following example is unnecessary:
+However, doing the same in the following example is unnecessary as a closure will always be required:
 
 ```js
 function multiplyArray(x) {
@@ -61,27 +63,18 @@ function multiplyArray(x) {
 
 ### Move function declarations to the end of the closure and after the return statement
 
-```js
-function () {
-  // do this
-  // do that
-  done()
-
-  function done() {
-
-  }
-}
-```
+Name each function declaration something meaningful so that a developer knows what it does by its name.
+Put all the implementation details within that function.
 
 ```js
 function () {
   // do this
   // do that
-  done()
+  doTheNextThing()
 
   return 'something'
 
-  function done() {
+  function doTheNextThing() {
 
   }
 }
@@ -114,7 +107,7 @@ Note: in the future, this will not be relevant in v8
 
 Strings are not errors! If `!(err instanceof Error)`, then it's not an error!
 The primary reason for this is so that errors have stack traces!
-Otherwise, where the hell did that arrow come from?
+Otherwise, where the hell did that error come from?
 
 ### Avoid using node.js event emitters
 
@@ -128,6 +121,8 @@ For binary data, streams are fine, but you should in general abstract them into 
 For example, https://github.com/expressjs/body-parser abstracts requests to return the body of a request.
 
 Other than being a subclass of emitters, streams are very buggy in node.js and have many minor edge cases that may cause leaks if not handled properly.
+
+My suggestion is to use many modules that abstract streams into `fn(stream) -> result` results.
 
 ### Don't use domains
 
@@ -150,6 +145,12 @@ Many editors such as `atom` have this enabled by default.
 ### One var/const/let per line
 
 Don't do any crazy whitespacing with commas!
+One declaration per line makes diffs easy!
+
+```js
+let a = 1;
+let b = 2;
+```
 
 ### Define arrays and objects in multiple lines and with traililng commas
 
