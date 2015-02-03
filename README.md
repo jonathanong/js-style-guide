@@ -1,6 +1,9 @@
 
 # JavaScript Style Guide
 
+For a purely aesthetic style guide, 
+I recommend using [standard](https://github.com/feross/standard).
+
 ## Organization
 
 Whenever possible, split your code into multiple files and modules!
